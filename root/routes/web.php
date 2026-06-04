@@ -1,47 +1,79 @@
 <?php
-
 use App\Http\Controllers\JobController;
-//自作のCRUD処理をまとめたクラス
+use App\Http\Controllers\ResidentController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-//get,postといったルーティングメソッドを提供するLaravelクラス
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\RemindController;
 
-Route::prefix('admin') ->name('admin')->group(function(){
-/**
- * prefix:URL全部に/adminを追加
- * name:ルート名にプレフィックス(admin)を追加    ex.admin.jobs.index
- * group:prefixやnameの設定をまとめて複数のルートに適用させる。
- */
-    Route::view('','admin.index')->name('.index');
-    /**
-     * view:コントローラ不要でBladeビューを直接返すショートカット
-     */
-    Route::prefix('jobs')->name('.jobs')->controller(JobController::class)->group(function(){
-    /**
-     * このグループ内のルートは全てJobControllerが担当するという宣言
-     * 以下メソッド(get/post(新規登録)/patch(部分更新)/delete)はHTTPメソッド対応のルート定義
-     */
-        Route::get('','index')->name('.index');
-        // name():ルート名上書きされないようこれまでのルート名+連結
-        // URL:ユーザーが実際にアクセスするパス
-        // ルート名：Laravel内部で使う名前（ニックネーム）
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
 
-        Route::post('','store')->name('.store');
-        //新規登録処理
-        Route::get('create','create')->name('.create');
-        //登録画面を表示
-        Route::get('{job}','show')->name('.show');
-        //詳細画面を表示
-        Route::patch('{job}','update')->name('.update');
-        //編集処理
-        Route::delete('{job}','destroy')->name('.destroy');
-        //削除処理
-        Route::get('{job}/edit','edit')->name('.edit');
-        //編集画面を表示
-        Route::get('{job}/confirm','confirm')->name('.confirm');
-        //確認画面を表示
+//トップページ
+Route::get('/', function () {
+    return view('welcome');
+    //view()でViewを呼び起こす
+    //welcome.blade.php を表示
+});
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+//middleware():「このルートに通す前にチェック処理を挟む」 という関数　authでログイン済みか否かをチェック
+//name()でルート名を指定。指定したルート名はroute()で呼び起せる。
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::middleware('auth')->prefix('admin')->name('admin')->group(function () {
+
+    // Route::view('', 'admin.index')->name('.index');
+    Route::get('',[HomeController::class,'index'])->name('.index');
+
+    Route::prefix('jobs')->name('.jobs')->controller(JobController::class)->group(function () {
+        Route::get('', 'index')->name('.index');
+        Route::post('', 'store')->name('.store');
+        Route::get('create', 'create')->name('.create');
+        Route::get('{job}', 'show')->name('.show');
+        Route::patch('{job}', 'update')->name('.update');
+        Route::delete('{job}', 'destroy')->name('.destroy');
+        Route::get('{job}/edit', 'edit')->name('.edit');
+        Route::get('{job}/confirm', 'confirm')->name('.confirm');
         Route::post('csv', 'downloadCsv')->name('.csv');
-        //csvダウンロード処理
         Route::post('tsv', 'downloadTsv')->name('.tsv');
-        //tsvダウンロード処理
+    });
+
+    Route::prefix('residents')->name('.residents')->controller(ResidentController::class)->group(function () {
+        Route::get('', 'index')->name('.index');
+        Route::post('', 'store')->name('.store');
+        Route::get('create', 'create')->name('.create');
+        // Route::get('remind','remind')->name('.remind');
+        //get():第一引数がURLパス,第二引数にメソッド
+        //指定メソッドのreturn view()によって表示Viewを決定
+        Route::get('{resident}', 'show')->name('.show');
+        //{resident}はワイルドカードのためそれより以下にtest書くとここでキャッチされる
+        Route::patch('{resident}', 'update')->name('.update');
+        Route::delete('{resident}', 'destroy')->name('.destroy');
+        Route::get('{resident}/edit', 'edit')->name('.edit');
+
+
+    });
+    Route::prefix('reminds')->name('.reminds')->controller(RemindController::class)->group(function(){
+        Route::get('','index')->name('.index');
+        Route::get('create','create')->name('.create');
+        Route::post('','store')->name('.store');
     });
 });
+
+require __DIR__.'/auth.php';
+//requireはPHP組み込み構文で別ファイルの中身をそのまま展開する

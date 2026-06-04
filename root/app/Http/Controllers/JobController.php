@@ -15,7 +15,7 @@ class JobController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    /**デフォルトの一覧表示 */
+    //デフォルトの一覧表示 */
     // public function index()
     // {
     //     $jobs = Job::orderByDesc('id')->paginate(20);
@@ -132,8 +132,8 @@ class JobController extends Controller
     //公開口。処理を組み立てレスポンスを返す。
     {
         $csvRecords = self::getJobCsvRecords();
-        //   CSVストリームダウンロード
         return self::streamDownloadCsv('jobs.tsv', $csvRecords, "\t");
+        //streamDownloadCsv:TSVファイル生成してブラウザにデータをダウンロードさせる。
     }
     /**
      * CSVダウンロード(公開口)
@@ -158,14 +158,17 @@ class JobController extends Controller
         $jobs = Job::orderByDesc('id')->get();
 
         $csvRecords = [
-            ['ID', '名称'], // ヘッダー
+            ['ID', '名称'], // ヘッダーを指定（二次元配列では添え字０の行になる）
         ];
         foreach ($jobs as $job) {
-            $csvRecords[] = [$job->id, $job->name]; // レコード
+            $csvRecords[] = [$job->id, $job->name];
+            // レコード $jobs->idはオブジェクトのプロパティにアクセスしている
+            //ヘッダーがなぜ上書きされないの
         }
         return $csvRecords;
     }
 
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     /**
      *ストリームダウンロード処理(汎用)
      *
@@ -178,9 +181,16 @@ class JobController extends Controller
         string $enclosure = '"',
         string $escape = "\\",
         string $eol = "\r\n"
+        //$separator,$enclosure, $eolが何で\rじゃなくて\r\nなのか
     ) {
         // Content-Type
-        $contentType = 'text/plain'; // テキストファイル
+        $contentType = 'text/plain';
+        /**
+         * MIMEタイプという規格　
+         * 'text/csv'→CSVファイルの標準MIMEタイプ
+         * 'text/tab-separated-values'→TSVの標準MIMEタイプ
+         * 'text/plain'→それ以外のテキストファイル
+         */
         if ($separator === ',') {
             $contentType = 'text/csv'; // CSVファイル
         } elseif ($separator === "\t") {
@@ -188,22 +198,45 @@ class JobController extends Controller
         }
         $headers = ['Content-Type' => $contentType];
 
+
         return response()->streamDownload(function () use ($fieldsList, $separator, $enclosure, $escape, $eol) {
-            $stream = fopen('php://output', 'w');       //fopen(開く対象,モード wは書き込み):ファイルを開くPHP標準関数
+            $stream = fopen('php://output', 'w');
+            /**
+             * fopen():ファイルを開く関数
+             * fopen(開く対象,モード) ※w:書き込みモード/a:追記/r:読み込みモード
+             * php://output ファイルパスではなく、PHPの特殊ストリーム　ここへ書き込むと画面出力へ流れる
+             */
             foreach ($fieldsList as $fields) {
-                fputcsv($stream, $fields, $separator, $enclosure, $escape, $eol);   //fputcsv:CSV形式で1行書き出す関数
+                fputcsv($stream, $fields, $separator, $enclosure, $escape, $eol);
+                //fputcsv:CSV形式で1行書き出す関数/どこに書くか,1行分のデータ,区切り文字,囲み文字,エスケープ文字,行末文字の順に
             }
-            fclose($stream);    //fopenでの処理を終了させる
+            fclose($stream);
+            //fopenでの処理を終了させる
         }, $name, $headers);
+        /**
+         * $nameと$headersはstreamDownload()の第二、第三引数
+         * streamDownload():何を何という名前でどんな形式でダウンロードするかを決める関数
+         * 第一引数:クロージャで何をダウンロードさせるか中身を定義
+         * 第二引数:ダウンロード時のファイル名定義
+         * 第三引数:HTTPレスポンスヘッダー(ブラウザにファイル形式を伝えている)
+         */
     }
+
+    //検索キーワードあれば絞り込み求人を無ければ全件を表示
     public function index(Request $request)
     {
         $keyword = $request->input('keyword');
+        //input():リクエストから値を取り出す関数
+        //フォームやURLパラメータからkeywordという値を取り出して$keywordへ入れる
         $jobs = Job::orderByDesc('id')
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where('name', 'like', "%{$keyword}%");
             })
+            //when():条件(第一引数)が真のとき第二引数の処理を行う
+            //where():SQLのWHERE句を組み立てる関数
+            //where('カラム名','演算子','値')
             ->paginate(20);
+            //20件ずつに分割して現在のページ文取得する
 
         return view('admin.jobs.index',[
             'jobs' => $jobs,

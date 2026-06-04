@@ -1,225 +1,78 @@
-# Laravel9環境
+# このアプリは何のためのアプリか
 
-Laravel9 のGitHubテンプレートリポジトリです。
+■アプリの学習目的
 
-## インストール
+・Laravel操作の全体像を把握するため
+・1人称での作業力を上げるため
 
-- Git (GitHub)
-- Docker Desktop
-- ターミナル (Windowsの場合、「PowerShell」, 「GitBash」等)
-- VSCode (任意)
-- SQLクライアント (任意 「A5:SQL Mk-2」、「DBeaver」等)
+# 誰向けのアプリか
 
-## テンプレート導入
+・アプリ概要：住民のプロフィール情報やリマインド内容の管理システム。リマインド内容を登録して何度も同じ注意がされているものは
+管理会社が把握しやすいようにするシステム。
+・アプリの目的：住民同士の会話のキッカケにすること・住民の心理安全性を担保すること・リマインド内容をデータ化して管理すること
 
-導入は、ダウンロードするか、テンプレートからリポジトリを作成してください。
+・ロールモデル：
+    ・国際交流型の50人規模のシェアハウスに住む住民
+    ・20代~40代向け
+    ・生活ルールを守りたい
 
-### ダウンロードする場合
+## 制作期間：5/（）～/（）
 
-「Code」から「Download ZIP」を選択するとダウンロードが可能です。
+## 工夫したポイント
 
-### リポジトリを作成する場合
+フールプルーフ
+不特定多数が操作を行っても、誤操作が起きないように
+データは全てNULL禁止にして住民同士が安心して過ごせるようにした
 
-#### リポジトリ作成
+削除ボタンが物理削除なので赤色にして、ポップアップ表示させた
 
-「Use this template」ボタンで、テンプレートから自身のリポジトリを作成してください。
+## 苦労した部分
 
-- テンプレートからリポジトリを作成する
-  - <https://docs.github.com/ja/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template>
+・クラスのインスタンス化・プロパティ・メソッド呼び出し
+・リストの使用
+・画像登録
+・Docker内フォルダにてログ記録
+・関数を何個用いた。それぞれの役割の把握をしながらコーディングして流れを把握するのが難しかった。
+・ブラウザ事のデフォルトCSSで、デザイン異ならないよう細かな部分までCSSで指定
 
-#### clone
+## 要件・追加機能は以下
 
-自身で作成したリポジトリをcloneしてください。
+### 実装機能は以下
 
-- リポジトリをクローンする
-  - <https://docs.github.com/ja/repositories/creating-and-managing-repositories/cloning-a-repository>
+- 住民情報のデータ登録機能
+- 住民の画像登録機能
+- 住民情報の物理削除機能
+- 住民情報の一覧表示機能
+- 住民情報の詳細表示機能
+- ログイン機能
+- リマインドの投稿機能
+- 天気の表示機能(API連携)
 
-## 開発環境
+- リマインド内容のグラフ化機能
+- 現住民と退去住民のグループ化機能
+- リマインド内容の月ごとのグループ化機能
 
-Dockerを使って環境を構築します。  
 
-### 構成図
+### JS機能実装
 
-![Docker](./docs/images/docker.svg)
+- 画像の表示をお洒落にする(詳細画面の画像)
+- 物理削除の際のダイアログ
 
-### 構築する環境
+### ＵＩ
 
-- Webコンテナ
-  - [php:8.1.14-apache](https://hub.docker.com/_/php)
-  - [composer:2.5.1](https://hub.docker.com/_/composer)
-- DBコンテナ
-  - [mysql:8.0.31](https://hub.docker.com/_/mysql)
-- phpMyAdminコンテナ
-  - [phpmyadmin:5.2.0](https://hub.docker.com/_/phpmyadmin)
+- Home画面
+- 住民の一覧画面
+- 住民の詳細画面
+- リマインド画面
 
-### .env
+### 優先度高め×すぐ出来る
 
-[.env](./.env)ファイルはDockerの環境ファイルです。  
-各名称・ポート設定をしてください。  
-基本的にはそのまま使用可能ですが、IPとポートが重複するとコンテナが起動しないので  
-自身の環境に合わせて設定を変えてください。
+- ER図もつくる
 
-### compose
+### 優先度低め×すぐ出来る
 
-以下のコマンドを実行します。
 
-```bash
-# ターミナルで実行
-## ls コマンドで docker-compose.yml があるか確認
-ls docker-compose.yml
-## docker-compose で環境構築  ※ 時間がかかるので注意
-docker-compose up -d
-```
+### 優先度低め×時間かかる
 
-上記コマンドでエラーがなければ環境構築が完了しています。
-
-### Laravel
-
-Laravel関連のコマンドはDockerで用意した、WEBサーバー（コンテナ）上で行います。
-
-```bash
-# ターミナルで実行
-## WEBサーバーに入るコマンド（-itの後に入る名称はコンテナ名「{NAME_PREFIX}-web」）
-docker exec -it laravel9-web bash
-```
-
-VSCodeの[Docker拡張機能](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker)が入っている場合、対象コンテナの「Attach Shell」でも開けます。  
-
-#### composer install
-
-```bash
-# ■ WEBサーバーで入力
-# 「composer.json」、「composer.lock」に記載されているパッケージをvendorディレクトリにインストール
-#   ※ 時間がかかるので注意。
-composer install
-```
-
-`composer install` 実行後に「`Exception`」が出ていると失敗しているので  
-[root/vendor/](./root/vendor/)ディレクトリを削除して、再実行してみましょう。  
-「`successfully`」が出ていれば成功です。
-
-#### Laravel初期設定
-
-```bash
-# ■ WEBサーバーで入力
-cd /var/www/root
-# 「.env」ファイル
-## 「.env.dev」ファイルを「.env」にコピー
-cp .env.dev .env
-# storage ディレクトリに読み取り・書き込み権限を与える（bootstrap, storage内に書き込み（ログ出力時等）に「Permission denied」のエラーが発生する）
-chmod -R 777 bootstrap/cache/
-chmod -R 777 storage/
-```
-
-### 確認
-
-- WEB ※ **IP・ポート番号は [`.env`](./.env) の `IP`・`PORT_WEB` を参照**
-  - <http://127.0.0.1:80/> （デフォルト設定のURL）  
-    [routes/web.php](./root/routes/web.php)のURI「`'/'`」の実行結果が画面に表示されます。  
-    VSCodeの[Docker拡張機能](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker)が入っている場合、対象コンテナの「Open in Browser」でも開けます。  
-- phpMyAdmin ※ **IP・ポート番号は [`.env`](./.env) の `IP`・`PORT_PHPMYADMIN` を参照**
-  - <http://127.0.0.1:8080> （デフォルト設定のURL）  
-    VSCodeの[Docker拡張機能](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker)が入っている場合、対象コンテナの「Open in Browser」でも開けます。  
-
-### SQLクライアント
-
-こちらは任意です。
-
-- `DBeaver`
-  - <https://dbeaver.io/>
-  - 接続情報 ※ [`.env`](./.env) の情報にあわせて設定すること
-    - ドライバ名: `MySQL`
-    - ServerHost: `localhost`  ～  `IP` 参照 (localhost = 127.0.0.1)
-    - Port: `3306`  ～  `PORT_DB` 参照
-    - Database: ※ 未入力でOK
-    - ユーザー名: `root`
-    - パスワード: `root`  ～  `DB_ROOT_PASSWORD` 参照
-- `A5:SQL Mk-2`
-  - <https://a5m2.mmatsubara.com/>
-  - 接続情報 ※ [`.env`](./.env) の情報にあわせて設定すること
-    - ホスト名: `localhost`  ～  `IP` 参照 (localhost = 127.0.0.1)
-    - ユーザーID: `root`
-    - パスワード: `root`  ～  `DB_ROOT_PASSWORD` 参照
-    - ポート番号: `3306`  ～  `PORT_DB` 参照
-
-### Laravel設定
-
-#### 言語ファイルダウンロード
-
-※ **以下は導入済みです**  
-
-「[`resources/lang/`](./root/resources/lang/)」に「`ja`」ディレクトリが生成され4つの言語ファイルが追加されます。  
-※ 2022/07 現在、Laravel8向けの言語ファイルしか用意されていません。  
-　Laravel8の言語ファイルを使う場合、Laravel9と言語ファイルの格納場所が異なるためご注意ください。  
-
-| Laravel | 言語ディレクトリパス |
-| --- | --- |
-| Laravel8 | root/resources/lang/ja |
-| Laravel9 | root/lang/ja |
-
-```bash
-# ■ WEBサーバーで入力
-cd /var/www/root
-php -r "copy('https://readouble.com/laravel/8.x/ja/install-ja-lang-files.php', 'install-ja-lang.php');"
-php -f install-ja-lang.php
-php -r "unlink('install-ja-lang.php');"
-
-# Laravel9の場合、lang/ja に移動
-mv resources/lang/ja/ lang/
-rmdir resources/lang/
-```
-
-- auth.php言語ファイル <https://readouble.com/laravel/8.x/ja/auth-php.html>
-- pagination.php言語ファイル <https://readouble.com/laravel/8.x/ja/pagination-php.html>
-- passwords.php言語ファイル <https://readouble.com/laravel/8.x/ja/passwords-php.html>
-- validation.php言語ファイル <https://readouble.com/laravel/8.x/ja/validation-php.html>
-
-#### app.php
-
-※ **以下は導入済みです**  
-
-`config/app.php` の日本設定を行います。
-
-| Key | Value | 備考 |
-| --- | :---: | --- |
-| timezone | `Asia/Tokyo` | デフォルト: `UTC` |
-| locale  | `ja` | デフォルト: `en` |
-| fallback_locale | `en` | デフォルト: `en`<br>locale の言語が見つからない場合に適用する言語<br>デフォルトの`en`を指定するのが良い |
-| faker_locale | `ja_JP` | デフォルト: `en_US` |
-
-#### .env.testing設定
-
-※ **以下は導入済みです（migrationは必要）**  
-
-Laravel UnitTest用の設定を行います。  
-[.env.testing](./root/.env.testing)ファイルを作成し、DB_*にテスト用データベース（laravel_test）を設定します。  
-UnitTest実行時に.envファイルの代わりに使われるためAPP_KEYなどの設定も必要です。  
-
-テスト用データベースにmigrationを適用には、以下のコマンドを実行します。  
-
-```sh
-php artisan migrate --env=testing
-```
-
-- `Laravel 9.x テスト: テストの準備`
-  - <https://readouble.com/laravel/9.x/ja/testing.html>
-
-#### Laravel Debugbar
-
-※ **以下は導入済みです**  
-
-Laravelで作成した画面の下にデバッグバーが表示され、様々な情報が見れるようになります。
-
-- GitHub
-  - <https://github.com/barryvdh/laravel-debugbar>
-  - Release
-    - <https://github.com/barryvdh/laravel-debugbar/releases>
-
-```bash
-# ■ WEBサーバーで入力
-cd /var/www/root
-# composer.json にパッケージを追加し、インストールする。 「--dev」をつけることで開発環境のみに適用。
-composer require --dev barryvdh/laravel-debugbar
-# config/debugbar.php を追加。
-php artisan vendor:publish --provider="Barryvdh\Debugbar\ServiceProvider"
-```
+- 大量データ登録時のページング機能つける(5pくらい)
+- モチベ維持に役立つ機能実装(記録グラフ化/画像一覧をJS用いてお洒落に表示/よく使う食材の相場の値段を整理)

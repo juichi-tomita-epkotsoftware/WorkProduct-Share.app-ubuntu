@@ -1,12 +1,28 @@
-<nav id="sidebarMenu" class="col-md-2 d-md-block bg-light sidebar collapse">
-  <div class="sidebar-sticky pt-3">
+ <nav id="sidebarMenu" class="col-md-2 d-md-block sidebar collapse" style="background-color: #1a5c38;">
+   <div class="sidebar-sticky pt-3">
     <ul class="nav flex-column">
+
+        {{-- Home --}}
       <li class="nav-item">
-        <a class="nav-link{{ request()->route()->named('admin.index') ? ' active' : '' }}" href="{{ route('admin.index') }}"><span data-feather="home"></span> ホーム</a>
+        <a class="nav-link{{ request()->route()->named('admin.index') ? ' active' : '' }}"
+          href="{{ route('admin.index') }}">
+          <span data-feather="home"></span>Home</a>
       </li>
+
+      {{-- Residents --}}
       <li class="nav-item">
-        <a class="nav-link{{ request()->route()->named('admin.jobs.*') ? ' active' : '' }}" href="{{ route('admin.jobs.index') }}"><span data-feather="file-text"></span> 職業</a>
+        <a class="nav-link{{ request()->route()->named('admin.residents.index') ? ' active' : '' }}"
+          href="{{ route('admin.residents.index') }}">
+          <span data-feather="file-text"></span>Residents</a>
       </li>
+
+      {{-- Remaind --}}
+      <li class="nav-item">
+          <a class="nav-link{{ request()->route()->named('admin.reminds.index') ? ' active' : '' }}"
+            href="{{ route('admin.reminds.index') }}">
+            <span data-feather="bell"></span>Remind</a>
+      </li>
+
     </ul>
   </div>
 </nav>
