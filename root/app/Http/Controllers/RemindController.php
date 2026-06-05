@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Remind;
+use App\Services\LineNotifyService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -45,6 +46,17 @@ class RemindController extends Controller
         'image_path'     => $imagePath,
         'remind_date'     => $request->remind_date,
     ]);
+
+    //カテゴリの件数チェック
+    $count = Remind::where('category',$request->category)->count();
+    if($count >= 5){
+        $lineService = new LineNotifyService();
+        $lineService->sendMessage(
+            // "{$request->category}のリマインドが{$count}件になりました。"
+            "I am Tomas"
+        );
+    }
+
     return redirect()->route('admin.reminds.index');
     }
 }
