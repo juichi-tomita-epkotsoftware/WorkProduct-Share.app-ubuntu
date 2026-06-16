@@ -1,0 +1,22 @@
+[33m07819b4[m[33m ([m[1;36mHEAD -> [m[1;32mfeature/initial-setup[m[33m, [m[1;31morigin/feature/initial-setup[m[33m)[m HEAD@{0}: rebase (finish): returning to refs/heads/feature/initial-setup
+[33m07819b4[m[33m ([m[1;36mHEAD -> [m[1;32mfeature/initial-setup[m[33m, [m[1;31morigin/feature/initial-setup[m[33m)[m HEAD@{1}: rebase (start): checkout 07819b4
+[33m9a8d2ab[m HEAD@{2}: rebase (finish): returning to refs/heads/feature/initial-setup
+[33m9a8d2ab[m HEAD@{3}: rebase (start): checkout b508342^
+[33m9a8d2ab[m HEAD@{4}: rebase (finish): returning to refs/heads/feature/initial-setup
+[33m9a8d2ab[m HEAD@{5}: commit (amend): slackAPI削除
+[33m96c8287[m HEAD@{6}: rebase: fast-forward
+[33mb508342[m HEAD@{7}: rebase (start): checkout b508342^
+[33m96c8287[m HEAD@{8}: rebase (finish): returning to refs/heads/feature/initial-setup
+[33m96c8287[m HEAD@{9}: rebase (start): checkout b508342^
+[33m96c8287[m HEAD@{10}: rebase (finish): returning to refs/heads/feature/initial-setup
+[33m96c8287[m HEAD@{11}: rebase (start): checkout b5083425af2923d010c449c624216c9740c8809d^
+[33m96c8287[m HEAD@{12}: rebase (finish): returning to refs/heads/feature/initial-setup
+[33m96c8287[m HEAD@{13}: rebase (start): checkout b5083425af2923d010c449c624216c9740c8809d^
+[33m96c8287[m HEAD@{14}: rebase (abort): returning to refs/heads/feature/initial-setup
+[33m96c8287[m HEAD@{15}: rebase (abort): returning to refs/heads/feature/initial-setup
+[33m96c8287[m HEAD@{16}: commit: slackAPI削除
+[33mb508342[m HEAD@{17}: commit: 緊急バックアップ
+[33m07819b4[m[33m ([m[1;36mHEAD -> [m[1;32mfeature/initial-setup[m[33m, [m[1;31morigin/feature/initial-setup[m[33m)[m HEAD@{18}: commit: 関数の定義漏れでcsvダウンロードできなかったのでダウンロード公開口用の関数を作成
+[33m0ec4cfd[m HEAD@{19}: commit: 操作性のため検索機能追加
+[33m5651816[m HEAD@{20}: reset: moving to HEAD
+[33m5651816[m HEAD@{21}: commit (initial): feat:add Laravel CRUD initial implementation

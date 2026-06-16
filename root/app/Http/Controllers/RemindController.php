@@ -59,4 +59,14 @@ class RemindController extends Controller
 
     return redirect()->route('admin.reminds.index');
     }
+
+    public function destroy(Remind $remind)
+    {
+        if($remind->image_path){
+            Storage::disk('public')->delete($remind->image_path);
+        }
+
+        $remind->delete();
+        return redirect()->route('admin.reminds.index');
+    }
 }
