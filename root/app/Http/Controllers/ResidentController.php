@@ -16,13 +16,32 @@ class ResidentController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function index()
+    public function index(Request $request)
     {
-        $residents = Resident::all();
-        //Residentテーブルの全レコードを取得して$residentsへ格納
-        return view('admin.residents.index',compact('residents'));
-        //表示Viewの指定とそのViewで配列residentsを使えるようにしている
+        $filter = $request->query('filter', 'all');
+        //URLの?filter=の値を取得。無ければ'all'をデフォルトにする
+        $keyword = $request->query('keyword');
+
+        $residents = Resident::query()
+            ->when($filter === 'current', fn ($q) => $q->whereNull('moved_out_at'))
+            // ->when($条件, $条件がtrueのとき実行する関数)
+            // fnは無名関数(クロージャの短縮記法)
+            ->when($filter === 'former',  fn ($q) => $q->whereNotNull('moved_out_at'))
+            ->when($keyword,fn ($q) => $q->where('name','like',"%{$keyword}%"))
+            //名前の絞り込みで検索。部分一致でも表示されるようlikeを使用
+            ->get();
+        //when(条件, 処理)：条件がtrueのときだけ処理（絞り込み）を追加する
+        //filterがallのときはどちらのwhenも発動せず全件取得になる
+
+        return view('admin.residents.index', compact('residents', 'filter','keyword'));
+        //$filterもViewへ渡す（ボタンの選択中表示に使うため）
     }
+
+    /**
+     * $query = Resident::query();          // この時点でDBには何も起きてない
+     * $query->whereNull('moved_out_at');   //まだ何も起きてない
+     * dd($query->toSql());                 //"select * from `residents` where `moved_out_at` is null"
+     */
 
     /**
      *2.住民の登録処理画面の表示
@@ -52,8 +71,11 @@ class ResidentController extends Controller
             'birthplace'  =>  'required|string|max:100',
             'age'  =>  'required|integer|min:0|max:150',
             'image'  =>  'required|image|max:2048', //2MBまで
-            'bio'  =>  'required|string|max:500', //500文字まで
+            'bio'  =>  'required|string|max:500', //
+            'photos'   => 'nullable|array|max:3',   // ←追加：photosは配列で最大3要素
+            'photos.*' => 'image|max:2048',         // ←追加：配列の各要素は画像で2MBまで
         ]);
+
 
         //ファイルを保存してパスを取得する
         $imagePath = null;
@@ -65,7 +87,7 @@ class ResidentController extends Controller
         }
 
 
-        Resident::create([
+        $resident = Resident::create([
             'name'  =>  $request->name,
             'job'  =>  $request->job,
             'likes'  =>  $request->likes,
@@ -78,6 +100,14 @@ class ResidentController extends Controller
             //保存先のパス文字列をDBへ保存
             'bio'  =>  $request->bio,
         ]);
+
+        if ($request->hasFile('photos')) {
+            foreach ($request->file('photos') as $photo) {
+                $path = $photo->store('resident_photos', 'public');
+                $resident->images()->create(['image_path' => $path]);
+            }
+        }
+
         return redirect()->route('admin.residents.index');
     }
 
@@ -119,8 +149,11 @@ class ResidentController extends Controller
             'dislikes'  =>  'required|string|max:255',
             'birthplace'  =>  'required|string|max:255',
             'age'  =>  'required|integer|min:0|max:150',
-            'image'  =>  'required|image|max:2048',
+            'image'  =>  'nullable|image|max:2048',
             'bio'  =>  'required|string|max:500', //500文字まで
+            'moved_out_at' => 'nullable|date',
+            'photos'   => 'nullable|array|max:3',   // ←追加
+            'photos.*' => 'image|max:2048',         // ←追加
         ]);
 
     $imagePath = $resident->image_path;
@@ -141,7 +174,15 @@ class ResidentController extends Controller
         'age'       =>$request->age,
         'image_path'=>  $imagePath,
         'bio'  => $request->bio,
+        'moved_out_at' => $request->moved_out_at,
     ]);
+
+        if ($request->hasFile('photos')) {
+            foreach ($request->file('photos') as $photo) {
+                $path = $photo->store('resident_photos', 'public');
+                $resident->images()->create(['image_path' => $path]);
+            }
+        }
 
         return redirect()->route('admin.residents.show',$resident);
     }
@@ -176,4 +217,6 @@ class ResidentController extends Controller
         //view()は実際のフォルダパス指定
         //conpact():
     }
+
+
 }

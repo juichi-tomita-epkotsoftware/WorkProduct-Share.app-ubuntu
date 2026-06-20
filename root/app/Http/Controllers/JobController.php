@@ -222,25 +222,5 @@ class JobController extends Controller
          */
     }
 
-    //検索キーワードあれば絞り込み求人を無ければ全件を表示
-    public function index(Request $request)
-    {
-        $keyword = $request->input('keyword');
-        //input():リクエストから値を取り出す関数
-        //フォームやURLパラメータからkeywordという値を取り出して$keywordへ入れる
-        $jobs = Job::orderByDesc('id')
-            ->when($keyword, function ($query) use ($keyword) {
-                $query->where('name', 'like', "%{$keyword}%");
-            })
-            //when():条件(第一引数)が真のとき第二引数の処理を行う
-            //where():SQLのWHERE句を組み立てる関数
-            //where('カラム名','演算子','値')
-            ->paginate(20);
-            //20件ずつに分割して現在のページ文取得する
 
-        return view('admin.jobs.index',[
-            'jobs' => $jobs,
-            'keyword' => $keyword,
-        ]);
-    }
 }

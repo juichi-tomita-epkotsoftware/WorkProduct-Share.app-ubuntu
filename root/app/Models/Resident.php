@@ -20,5 +20,13 @@ class Resident extends Model
         'age',
         'image_path',
         'bio',
+        'moved_out_at',
     ];
+    public function images()
+    // この関数は「処理」ではなく「宣言」
+    //Controllerは「いつ・何を」、Modelは「データとは何か」を書く場所
+{
+    return $this->hasMany(ResidentImage::class);
+}
+
 }
