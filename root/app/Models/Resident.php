@@ -21,6 +21,7 @@ class Resident extends Model
         'image_path',
         'bio',
         'moved_out_at',
+        'user_id',
     ];
     public function images()
     // この関数は「処理」ではなく「宣言」
@@ -28,5 +29,10 @@ class Resident extends Model
 {
     return $this->hasMany(ResidentImage::class);
 }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
 }
