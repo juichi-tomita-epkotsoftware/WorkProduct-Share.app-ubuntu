@@ -1,4 +1,4 @@
-@extends('admin.base')
+@extends('layouts.admin')
 @section('title','Share.app Residents')
 
 @section('content')

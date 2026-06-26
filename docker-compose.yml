@@ -8,6 +8,7 @@ services:
       context: "./docker/php"
     ports:
       - "${IP}:${PORT_WEB}:80"
+      - "8000:8000"
     volumes:
       - "./root:/var/www/root"
       - "./root/vendor:/var/www/root/vendor:delegated"

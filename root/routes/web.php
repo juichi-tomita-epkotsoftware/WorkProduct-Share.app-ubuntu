@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RemindController;
+use App\Http\Controllers\HouseRuleQAController;
 
 
 //トップページ
@@ -50,8 +51,13 @@ Route::middleware('auth')->prefix('admin')->name('admin')->group(function () {
         Route::get('create','create')->name('.create');
         Route::post('','store')->name('.store');
         Route::delete('{remind}','destroy')->name('.destroy');
-    });
-});
 
+    });
+    Route::prefix('house_qa')->name('.house_qa')->controller(HouseRuleQAController::class)->group(function(){
+        Route::get('','index')->name('.index');
+        Route::post('','ask')->name('.ask');
+    });
+
+});
 require __DIR__.'/auth.php';
 //requireはPHP組み込み構文で別ファイルの中身をそのまま展開する

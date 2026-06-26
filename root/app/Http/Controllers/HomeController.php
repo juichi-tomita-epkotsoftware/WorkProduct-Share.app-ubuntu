@@ -23,7 +23,7 @@ class HomeController extends Controller
         //これはURL宛てに送る設定値
 
         $weather = $response->json();
-        return view('admin.index',compact('weather','residentCount'));
+        return view('admin.home.index',compact('weather','residentCount'));
     }
 
 }

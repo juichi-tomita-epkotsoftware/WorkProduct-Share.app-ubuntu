@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+{{-- 住民追加や編集などの操作を行う際の土台ビュー
+サイドバーなし --}}
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">

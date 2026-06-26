@@ -1,4 +1,9 @@
-{{-- ベース --}}
+{{-- 親ベース
+ログイン後すぐに遷移する基本画面の土台ビュー
+・サイドバー(Home,Residents,Remindsなど)
+・ナビバー(上のログアウトなど記載のバー)
+はここで使われる
+--}}
 
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -30,12 +35,16 @@
 <div class="container-fluid">
   <div class="row">
 <!-- Sidebar -->
-@include('admin.sidebar')
+@include('components.sidebar')
 <!-- Sidebar end -->
     <main role="main" class="col-md-10 ml-sm-auto px-md-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">@yield('title')</h1>
       </div>
+      {{-- 以下<x-alert></x-alert>はLaravelのsession flash messageという機能
+      データ登録など行った際に「成功した」というメッセージをsettionに入れる
+      →viewにsessionからメッセージを取り出して１回だけ画面に表示する
+      --}}
       <x-alert type="info"/>
       <x-alert type="success"/>
       <x-alert type="warning"/>
@@ -50,14 +59,29 @@
   </div>
 </div>
     <!-- Scripts -->
+    {{-- CDNからJS読み込み --}}
+    {{-- <script>タグはブラウザでJSを実行するためのタグ ※srcタグでファイル指定をすれば外部JSファイルを読み込んで実行できる
+    読み込み順序：
+    1. jquery（DOM 操作用）
+    2. popper.js（Bootstrap が内部で使用）
+    3. bootstrap.js（Bootstrap の JS 機能有効化）
+    4. feather-icons.js（アイコン表示）
+    5. 初期化スクリプト（下記）
+    6. @yield('script')（ページ固有の JS）
+      --}}
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js" integrity="sha384-VHvPCCyXqtD5DqJeNxl2dtTyhF78xXNXdkwX1CZeRusQfRKp+tA7hAShOK/B/fQ2" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"></script>
     <script>
       // https://github.com/feathericons/feather
+      // {{-- Feather Icons を SVG に変換 --}}
       feather.replace();
 
+      //マウスを乗せたら出現するツールチップス処理を実装
+      //      <Tooltip 初期化>
+      //      対象：data-toggle="tooltip" を持つ要素
+      //      動作：マウスホバーで title 属性を popup 表示
       $(function () {
         $('[data-toggle="tooltip"]').tooltip();
       });

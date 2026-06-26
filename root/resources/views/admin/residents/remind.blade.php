@@ -1,10 +1,10 @@
-@extends('admin.base')
+@extends('layouts.admin')
 @section('title', 'Test202605211128')
 
 @section('content')
 
   <h2>Remind Report</h2>
-  
+
   <p>総人数：{{ $residents->count() }} 人</p>
 
   {{-- ====================== --}}
