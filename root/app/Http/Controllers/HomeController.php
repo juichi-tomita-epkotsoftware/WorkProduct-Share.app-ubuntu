@@ -2,28 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-//フォーム・URLからのデータを受け取るクラス
-use Illuminate\Support\Facades\Http;
-//外部APIにHTTPリクエストを送るクラス
-use App\Models\Resident;
+use App\Services\Weather\WeatherService;    // ← 「namespace + クラス名」を指定
+//天気のAPIを取得するクラス
+use App\Services\Resident\ResidentCount;
+//現住人の人数をカウントするクラス
 
 class HomeController extends Controller
 {
+    public function __construct(
+        private WeatherService $weatherService,
+        private ResidentCount $residenService
+        //private クラス名  変数名
+    ){}
+
     public function index()
     {
-        $residentCount = Resident::count();
-
-        $response = Http::get('https://api.openweathermap.org/data/2.5/weather',[
-            'q' => 'Tokyo',
-            'appid' => env('OPENWEATHER_API_KEY'),
-            'units' => 'metric',
-            'lang' => 'ja',
+        return view('admin.home.index',[
+            'weather' => $this->weatherService->getTokyo(),
+            //Weatherサービスのメソッド使用
+            'residentCount' => $this->residenService->getCount(),
+            //Residentサービスのメソッド使用
         ]);
-        //これはURL宛てに送る設定値
-
-        $weather = $response->json();
-        return view('admin.home.index',compact('weather','residentCount'));
     }
-
 }

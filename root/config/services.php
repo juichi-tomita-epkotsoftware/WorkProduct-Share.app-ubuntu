@@ -34,6 +34,12 @@ return [
     'openweather' =>[
         'key'=> env('OPENWEATHER_API_KEY'),
     ],
+
+    'line' => [
+        'channel_access_token' => env('LINE_CHANNEL_ACCESS_TOKEN'),
+        'group_id'             => env('LINE_GROUP_ID'),
+    ],
+
     'openai' => [
     'api_key' => env('OPENAI_API_KEY'),
 ],
