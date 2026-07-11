@@ -62,7 +62,7 @@ class RemindService
     {
         $count = Remind::where('category', $category)->count();
 
-        if ($count >= 5) {
+        if ($count > 5) {
             $this->lineNotifyService->sendMessage(
                 "{$category}のリマインドが{$count}件になりました。"
             );
