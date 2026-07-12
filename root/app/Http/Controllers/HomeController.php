@@ -18,7 +18,7 @@ class HomeController extends Controller
     public function index()
     {
         return view('admin.home.index',[
-            'weather' => $this->weatherService->getTokyo(),
+            'weathers' => $this->weatherService->getTokyo(),
             //Weatherサービスのメソッド使用
             'residentCount' => $this->residenService->getCount(),
             //Residentサービスのメソッド使用
