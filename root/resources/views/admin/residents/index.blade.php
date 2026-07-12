@@ -3,7 +3,7 @@
 
 @section('content')
 <h1>ShareMenbers</h1>
-<a href="{{ route('admin.residents.create') }}"
+<a href="{{ route('admin.resident.create') }}"
    style="display:inline-block; background:#2e7d32; color:white; text-decoration:none; border-radius:999px; padding:10px 24px; font-size:15px; font-weight:600; letter-spacing:0.5px; margin-bottom:20px;">
     ＋ New registration
 </a>
