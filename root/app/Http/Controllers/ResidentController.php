@@ -29,7 +29,7 @@ class ResidentController extends Controller
         $keyword = $request->query('keyword');
         //keywordは名前検索ボックスの入力値
 
-        $residents = $this->residentService->getList($filter, $keyword);
+        $residentList = $this->residentService->getList($filter, $keyword);
 
         return view('admin.residents.index', compact('residents', 'filter', 'keyword'));
     }
