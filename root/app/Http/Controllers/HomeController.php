@@ -18,10 +18,12 @@ class HomeController extends Controller
     public function index()
     {
         return view('admin.home.index',[
-            'weathers' => $this->weatherService->getTokyo(),
+            'weather' => $this->weatherService->getTokyo(),
             //Weatherサービスのメソッド使用
             'residentCount' => $this->residenService->getCount(),
             //Residentサービスのメソッド使用
         ]);
     }
+    //compact()：PHPの標準関数。変数名の文字列から連想配列をつくるだけ。
+    //compact()を使わないと変数をビューに渡せないわけではない。
 }

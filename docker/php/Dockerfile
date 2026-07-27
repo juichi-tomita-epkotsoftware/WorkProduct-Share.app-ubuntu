@@ -22,3 +22,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Node.js 18インストール
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get install -y nodejs
+
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug

@@ -24,14 +24,13 @@ class ResidentController extends Controller
 
     //一覧表示画面をかえす
     public function index(Request $request)
+    //Request $request 今届いたHTTPリクエストの中身が全部入った箱(URL,HTTPメソッド,)
     {
         $filter = $request->query('filter', 'all');
         $keyword = $request->query('keyword');
         //keywordは名前検索ボックスの入力値
-
-        $residentList = $this->residentService->getList($filter, $keyword);
-
-        return view('admin.residents.index', compact('residents', 'filter', 'keyword'));
+        $residents = $this->residentService->getList($filter, $keyword);
+        return view('admin.residents.index', compact('residents','filter', 'keyword'));
     }
 
     //登録処理画面をかえす
@@ -59,6 +58,7 @@ class ResidentController extends Controller
     public function show(Resident $resident)
     {
         return view('admin.residents.show', compact('resident'));
+        //ここでcompact('resident')を指定できるのは引数のモデル内で変数定義してるから
     }
 
     //編集表示画面をかえす

@@ -2,8 +2,9 @@
 @section('title','Share.app Residents')
 
 @section('content')
+
 <h1>ShareMenbers</h1>
-<a href="{{ route('admin.resident.create') }}"
+<a href="{{ route('admin.residents.create') }}"
    style="display:inline-block; background:#2e7d32; color:white; text-decoration:none; border-radius:999px; padding:10px 24px; font-size:15px; font-weight:600; letter-spacing:0.5px; margin-bottom:20px;">
     ＋ New registration
 </a>
@@ -11,22 +12,25 @@
 {{-- 全て/現住民/旧住民でフィルタリング --}}
 <div style="margin-bottom:20px;">
     @foreach (['all' => 'All', 'current' => 'Current', 'former' => 'Old'] as $key => $label)
-    //1周目 $key=all,$label=All
-    //2周目 $key=current,$label=Current
-    //3周目 $key=former,$label=Old
         <a href="{{ route('admin.residents.index', ['filter' => $key]) }}"
-        {{-- route()が引数内で指定されたルート名をUELへ変換する --}}
-        {{-- ここでのfilterはURLのパラメータ値ではなくパラメータ名。要は?filter=currentのfilter部分 --}}
            style="display:inline-block; padding:6px 18px; border-radius:999px; text-decoration:none; font-size:14px; margin-right:6px;
                   {{ $filter === $key
                       ? 'background:#2e7d32; color:white; font-weight:600;'
                       : 'background:white; color:#2e7d32; border:1px solid #2e7d32;' }}">
-                      {{-- ここで選択中の色を白にしている --}}
             {{ $label }}
         </a>
+        <!--
+
+    //1周目 $key=all,$label=All
+    //2周目 $key=current,$label=Current
+    //3周目 $key=former,$label=Old
+        {{-- route()が引数内で指定されたルート名をUELへ変換する --}}
+        {{-- ここでのfilterはURLのパラメータ値ではなくパラメータ名。要は?filter=currentのfilter部分 --}}
         //href=リンクの飛び先URLを指定する属性
         //$filter=コントローラから渡された変数(ユーザーはどのフィルタを選んでいるか判断するための変数であり、)
         //ユーザーはどのフィルタを選んでいるか判断するための変数であり、$filterがtrueのときにボタンは緑色(選択中)になるようにしてる
+        -->
+
     @endforeach
 </div>
 
@@ -44,7 +48,7 @@
 
 <table class="table table-bordered table-hover" style="font-size: 18px">
     <tr>
-        <th>Name</th><th>Work</th><th>BirthPlace</th><th>Age</th><th style="width: 120px">Action</th>
+        <th>Name</th><th>Work</th><th>BirthPlace</th><th>Age</th><th>Registered by</th><th style="width: 120px">Action</th>
     </tr>
     @foreach($residents as $resident)
     <tr>
@@ -57,6 +61,7 @@
         <td>{{ $resident->job }}</td>
         <td>{{ $resident->birthplace }}</td>
         <td>{{ $resident->age }}</td>
+        <td>{{ $resident->user?->name ?? '不明' }}</td>
         <td>
 
             @if($resident->user_id === auth()->id())

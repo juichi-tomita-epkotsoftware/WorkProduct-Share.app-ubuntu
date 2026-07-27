@@ -3,7 +3,7 @@
 namespace App\Services\Remind;
 
 use App\Models\Remind;
-use App\Services\LINE\LineNotifyService;
+use App\Services\Line\LineNotifyService;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 

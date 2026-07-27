@@ -18,7 +18,7 @@ class RemindController extends Controller
     //一覧表示画面をかえす
     public function index()
     {
-        $remindList = $this->remindService->getList();
+        $reminds = $this->remindService->getList();
         return view('admin.reminds.indexremind', compact('reminds'));
     }
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\HouseRuleAIService;
+use App\Services\AI\HouseRuleAIService;
 use Illuminate\Http\Request;
 
 class HouseRuleQAController extends Controller

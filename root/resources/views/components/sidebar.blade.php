@@ -30,6 +30,16 @@
           <span data-feather="bell"></span>Rules</a>
     </li>
 
+    {{-- テスト --}}
+    <li class="nav-item">
+        <a class="nav-link{{ request()->route()->named('admin.tests.index') ? ' active' : '' }}"
+          href="{{ route('admin.tests.index') }}">
+          <span data-feather="bell"></span>Test</a>
+    </li>
+    <!--
+    ・hrefはGETのURLの指定　route()内の引数へクリックしたら移動する。
+    ・named()は現状の受信済みの現状のリクエストがどのルートでマッチしたかを紹介している
+    -->
   </ul>
 </div>
 </nav>

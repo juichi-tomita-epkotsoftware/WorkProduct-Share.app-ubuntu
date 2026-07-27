@@ -14,6 +14,7 @@ class ResidentService
     public function getList(string $filter, ?string $keyword)
     {
         return Resident::query()
+            ->with('user')
             ->when($filter === 'current', fn ($q) => $q->whereNull('moved_out_at'))
             //when()：条件付きでクエリ組み立て処理を実行するか決める分岐
             //moved_out_at IS NULL
@@ -25,11 +26,14 @@ class ResidentService
 
     /**
      * 新規登録
+     * 要確認：
      */
     public function create(array $data, ?UploadedFile $image, array $photos = []): Resident
     {
         $imagePath = $image ? $image->store('admin.residents', 'public') : null;
-
+      //$imagePath = 条件 ? 真のときの値 :真のときの値 : 偽のときの値
+      //store()の第一引数は保存先ディレクトリ。(どの倉庫のどの棚に置くか)。第二引数はディスク名(どの倉庫におくか)
+      //...$date：スプレッド演算子。$dataの中身を展開する。
         $resident = Resident::create([
             ...$data,
             'image_path' => $imagePath,
