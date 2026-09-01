@@ -4,7 +4,7 @@
 @section('content')
 <h1>Please enter your personal information</h1>
 
-<form action="{{ route('admin.residents.store') }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route('user.residents.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
     <div>
         <label>Name</label>

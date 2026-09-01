@@ -30,13 +30,13 @@ class ResidentController extends Controller
         $keyword = $request->query('keyword');
         //keywordは名前検索ボックスの入力値
         $residents = $this->residentService->getList($filter, $keyword);
-        return view('admin.residents.index', compact('residents','filter', 'keyword'));
+        return view('user.residents.index', compact('residents','filter', 'keyword'));
     }
 
     //登録処理画面をかえす
     public function create()
     {
-        return view('admin.residents.create');
+        return view('user.residents.create');
     }
 
     //FormRequestのバリデーション後、StoreResidentRequestのインスタンスへアクセスして登録処理を行う
@@ -51,13 +51,13 @@ class ResidentController extends Controller
             photos: $request->file('photos', []),
         );
 
-        return redirect()->route('admin.residents.index');
+        return redirect()->route('user.residents.index');
     }
 
     //詳細表示画面をかえす
     public function show(Resident $resident)
     {
-        return view('admin.residents.show', compact('resident'));
+        return view('user.residents.show', compact('resident'));
         //ここでcompact('resident')を指定できるのは引数のモデル内で変数定義してるから
     }
 
@@ -69,7 +69,7 @@ class ResidentController extends Controller
             //abort():処理を強制終了して指定HTTPをかえす。Laravelのグローバルヘルパー関数。
             //403:権限の有無でサーバーから使用を拒否された際のHTTPステータスコード
         }
-        return view('admin.residents.edit', compact('resident'));
+        return view('user.residents.edit', compact('resident'));
     }
 
     //FormRequestのバリデーション後、StoreResidentRequestのインスタンスへアクセスして編集処理を行う
@@ -87,14 +87,13 @@ class ResidentController extends Controller
             image: $request->file('image'),
             photos: $request->file('photos', []),
         );
-
-        return redirect()->route('admin.residents.show', $resident);
+        return redirect()->route('user.residents.show', $resident);
     }
 
     //StoreResidentRequestのインスタンスへアクセスして削除処理を行う
     public function destroy(Resident $resident)
     {
         $this->residentService->delete($resident);
-        return redirect()->route('admin.residents.index');
+        return redirect()->route('user.residents.index');
     }
 }

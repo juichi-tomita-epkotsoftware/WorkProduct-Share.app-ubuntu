@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use App\Services\Resident\ResidentService;
 use App\Http\Requests\StoreResidentRequest;
-
 class TestController extends Controller
 {
 
@@ -47,10 +46,9 @@ class TestController extends Controller
         // dd();
         $validated = $request->validated();
         $this->residentService->create(
-            data: collect($validated)->except(['image','phots'])->toArray(),
-            image:$request->file('image'),
-            photos:$request->file('photos',[]),
-            //ここの記述がイマイチ理解できない
+            data: collect($validated)->except(['image','photos'])->toArray(),
+            image:$request->file('image'),  //１枚(アイコン用の写真)
+            photos:$request->file('photos',[]),     //複数枚(NNULL可の写真のため消しても問題ない)
         );
 
         return redirect()->route('admin.tests.index');
@@ -74,9 +72,9 @@ class TestController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Resident $testdata)
     {
-        //
+        return view('admin.tests.edit',compact('testdata'));
     }
 
     /**
@@ -86,9 +84,17 @@ class TestController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreResidentRequest $request, Resident $testdata)
     {
-        //
+        $validated = $request->validated();
+        $this->residentService->update(
+            resident: $testdata,
+            data: collect($validated)->except(['image', 'photos'])->toArray(),
+            image: $request->file('image'),
+            photos: $request->file('photos', []),
+        );
+
+        return redirect()->route('admin.tests.index');
     }
 
     /**

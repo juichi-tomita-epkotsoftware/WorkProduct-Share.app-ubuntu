@@ -4,38 +4,33 @@
 
       {{-- Home --}}
     <li class="nav-item">
-      <a class="nav-link{{ request()->route()->named('admin.index') ? ' active' : '' }}"
-        href="{{ route('admin.index') }}">
+      <a class="nav-link{{ request()->route()->named('user.index') ? ' active' : '' }}"
+        href="{{ route('user.index') }}">
         <span data-feather="home"></span>Home</a>
     </li>
 
     {{-- Residents --}}
     <li class="nav-item">
-      <a class="nav-link{{ request()->route()->named('admin.residents.index') ? ' active' : '' }}"
-        href="{{ route('admin.residents.index') }}">
-        <span data-feather="file-text"></span>Residents</a>
+      <a class="nav-link{{ request()->route()->named('user.residents.index') ? ' active' : '' }}"
+        href="{{ route('user.residents.index') }}">
+        <span data-feather="user"></span>Residents</a>
     </li>
 
     {{-- Remaind --}}
     <li class="nav-item">
-        <a class="nav-link{{ request()->route()->named('admin.reminds.index') ? ' active' : '' }}"
-          href="{{ route('admin.reminds.index') }}">
+        <a class="nav-link{{ request()->route()->named('user.reminds.index') ? ' active' : '' }}"
+          href="{{ route('user.reminds.index') }}">
           <span data-feather="bell"></span>Remind</a>
     </li>
 
     {{-- Q&A(LLM機能) --}}
     <li class="nav-item">
-        <a class="nav-link{{ request()->route()->named('admin.house_qa.index') ? ' active' : '' }}"
-          href="{{ route('admin.house_qa.index') }}">
-          <span data-feather="bell"></span>Rules</a>
+        <a class="nav-link{{ request()->route()->named('user.house_qa.index') ? ' active' : '' }}"
+          href="{{ route('user.house_qa.index') }}">
+          <span data-feather="book-open"></span>Rules</a>
     </li>
 
-    {{-- テスト --}}
-    <li class="nav-item">
-        <a class="nav-link{{ request()->route()->named('admin.tests.index') ? ' active' : '' }}"
-          href="{{ route('admin.tests.index') }}">
-          <span data-feather="bell"></span>Test</a>
-    </li>
+
     <!--
     ・hrefはGETのURLの指定　route()内の引数へクリックしたら移動する。
     ・named()は現状の受信済みの現状のリクエストがどのルートでマッチしたかを紹介している

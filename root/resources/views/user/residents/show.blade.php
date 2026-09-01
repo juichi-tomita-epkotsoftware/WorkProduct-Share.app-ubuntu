@@ -50,11 +50,11 @@
 
         {{-- アクションボタン --}}
         <div style="margin-top:28px; display:flex; gap:10px;">
-            <a href="{{ route('admin.residents.edit', $resident) }}"
+            <a href="{{ route('user.residents.edit', $resident) }}"
             style="display:inline-block; background:#2e7d32; color:white; text-decoration:none; border-radius:999px; padding:8px 24px; font-size:14px; font-weight:600;">
                 Edit
             </a>
-            <a href="{{ route('admin.residents.index') }}"
+            <a href="{{ route('user.residents.index') }}"
             style="display:inline-block; background:white; color:#2e7d32; border:1px solid #2e7d32; text-decoration:none; border-radius:999px; padding:8px 24px; font-size:14px; font-weight:600;">
                 Return to list
             </a>

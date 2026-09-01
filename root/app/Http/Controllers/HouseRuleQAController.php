@@ -17,7 +17,7 @@ class HouseRuleQAController extends Controller
     // Q&A ページの表示
     public function index()
     {
-        return view('admin.house_rule_qa.index');
+        return view('user.house_rule_qa.index');
     }
 
     // API エンドポイント：質問に回答する

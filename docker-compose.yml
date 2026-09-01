@@ -13,9 +13,6 @@ services:
       - "./root/vendor:/var/www/root/vendor:delegated"
       - "./root/storage:/var/www/root/storage:delegated"
       - "web_data_volume:/var/www/root/bootstrap/cache"
-      - "web_data_volume:/var/www/root/storage/debugbar"
-      - "web_data_volume:/var/www/root/storage/framework/sessions"
-      - "web_data_volume:/var/www/root/storage/framework/views"
       - "./docker/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini"
     extra_hosts:                                                          # ← 追加
       - "host.docker.internal:host-gateway"                              # ← 追加

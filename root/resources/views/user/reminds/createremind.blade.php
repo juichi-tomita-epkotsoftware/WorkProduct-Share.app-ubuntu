@@ -12,7 +12,8 @@
     </ul>
 @endif
 
-<form action="{{ route('admin.reminds.store') }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route('user.reminds.store') }}" method="POST" enctype="multipart/form-data"
+        onsubmit="return confirm('登録しますか?')">>
     @csrf
     <div>
         <label>Image（optional）</label>

@@ -15,4 +15,13 @@ class Remind extends Model
         'remind_date',
     ];
 
+    public const CATEGORIES = [
+    'kitchen',
+    'Shower Room',
+    'Work Space',
+    'Trash',
+    'The other'
+];
+
 }
+

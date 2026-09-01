@@ -20,9 +20,15 @@ class RemindService
     ) {}
 
     //一覧取得(remind_dateの昇順)
-    public function getList()
+    public function getList(?string $category =null)
     {
-        return Remind::orderBy('remind_date', 'asc')->get();
+        $query = Remind::query()
+            ->when($category,fn($q) => $q->where('category',$category))
+            ->orderBy('remind_date','asc');
+
+        return $category
+            ? $query->paginate(10)->withQueryString()
+            : $query->limit(5)->get();
     }
 
     //登録処理

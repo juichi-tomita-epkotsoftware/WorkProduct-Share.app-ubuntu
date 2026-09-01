@@ -94,7 +94,7 @@
         document.getElementById('error').style.display = 'none';
 
         try {
-            const response = await fetch('{{ route("admin.house_qa.ask") }}', {
+            const response = await fetch('{{ route("user.house_qa.ask") }}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -5,6 +5,7 @@ namespace App\Services\Resident;
 use App\Models\Resident;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class ResidentService
 {
@@ -26,16 +27,22 @@ class ResidentService
 
     /**
      * 新規登録
-     * 要確認：
+     * 引数の?はNULL許容という意味
+     * UploadedFileはユーザーがアップロードしたファイルに限定する型指定
+     * $photosはユーザーがアップロードしたファイルが複数枚格納されたリストが変数化しているから型指定はarrayにしている
      */
     public function create(array $data, ?UploadedFile $image, array $photos = []): Resident
     {
         $imagePath = $image ? $image->store('admin.residents', 'public') : null;
-      //$imagePath = 条件 ? 真のときの値 :真のときの値 : 偽のときの値
-      //store()の第一引数は保存先ディレクトリ。(どの倉庫のどの棚に置くか)。第二引数はディスク名(どの倉庫におくか)
+      //$imagePath = 条件 ? 真のときの値 :　偽のときの値
+      //store():第一引数は保存先ディレクトリ　第二引数はディスク名
+      //アップロード後のがいるはサーバの一次領域/tmpに置かれる。それをディスクへ移動する関数がstore()
+
       //...$date：スプレッド演算子。$dataの中身を展開する。
+
         $resident = Resident::create([
             ...$data,
+            'user_id'    => Auth::id(),
             'image_path' => $imagePath,
         ]);
 
@@ -46,6 +53,7 @@ class ResidentService
 
     /**
      * 更新
+     * アイコン写真は既存のものがあれば消える仕様。ただ追加写真はただ増えていく。
      */
     public function update(Resident $resident, array $data, ?UploadedFile $image, array $photos = []): Resident
     {
