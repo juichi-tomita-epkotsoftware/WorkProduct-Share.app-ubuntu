@@ -11,10 +11,6 @@ services:
       - "./root:/var/www/root"
       - "./root/vendor:/var/www/root/vendor:delegated"
       - "./root/storage:/var/www/root/storage:delegated"
-      - "web_data_volume:/var/www/root/bootstrap/cache"
-      - "web_data_volume:/var/www/root/storage/debugbar"
-      - "web_data_volume:/var/www/root/storage/framework/sessions"
-      - "web_data_volume:/var/www/root/storage/framework/views"
     environment:
       - "TZ=Asia/Tokyo"
     working_dir: /var/www/root
@@ -47,7 +43,5 @@ services:
       - "TZ=Asia/Tokyo"
     restart: always
 volumes:
-  web_data_volume:
-    name: "${NAME_PREFIX}-web-volume"
   mysql_data_volume:
     name: "${NAME_PREFIX}-mysql-volume"
