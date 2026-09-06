@@ -2,3 +2,5 @@
 .vscode/
 .history/
 answer.md
+packages-before.txt
+docker-compose.yml.bak

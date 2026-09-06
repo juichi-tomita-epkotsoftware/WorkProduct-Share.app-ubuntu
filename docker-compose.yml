@@ -12,7 +12,6 @@ services:
       - "./root:/var/www/root"
       - "./root/vendor:/var/www/root/vendor:delegated"
       - "./root/storage:/var/www/root/storage:delegated"
-      - "web_data_volume:/var/www/root/bootstrap/cache"
       - "./docker/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini"
     extra_hosts:                                                          # ← 追加
       - "host.docker.internal:host-gateway"                              # ← 追加
@@ -48,7 +47,5 @@ services:
       - "TZ=Asia/Tokyo"
     restart: unless-stopped
 volumes:
-  web_data_volume:
-    name: "${NAME_PREFIX}-web-volume"
   mysql_data_volume:
     name: "${NAME_PREFIX}-mysql-volume"
